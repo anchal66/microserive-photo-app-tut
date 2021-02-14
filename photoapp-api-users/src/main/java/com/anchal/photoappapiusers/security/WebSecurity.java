@@ -18,8 +18,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/**")
-                .hasIpAddress(environment.getProperty("gateway.ip"));
+                .hasIpAddress(environment.getProperty("gateway.ip"))
+                .and().addFilter(getAuthFilter());
         //for opening H2 console
         http.headers().frameOptions().disable();
+    }
+    private AuthFilter getAuthFilter() throws Exception {
+        AuthFilter authFilter =  new AuthFilter();
+        authFilter.setAuthenticationManager(authenticationManager());
+        return authFilter;
     }
 }
