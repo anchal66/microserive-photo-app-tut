@@ -21,8 +21,8 @@ public class UserService {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         UserEntity userEntity = modelMapper.map(userDetails, UserEntity.class);
-        userEntity.setEncryptedPassword("Test");
-        userRepository.save(userEntity);
-        return null;
+        userEntity.setEncryptedPassword("Test");userRepository.save(userEntity);
+        UserDto userRes = modelMapper.map(userEntity, UserDto.class);
+        return userRes;
     }
 }

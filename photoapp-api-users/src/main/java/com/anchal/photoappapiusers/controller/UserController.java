@@ -2,6 +2,7 @@ package com.anchal.photoappapiusers.controller;
 
 import com.anchal.photoappapiusers.dto.UserDto;
 import com.anchal.photoappapiusers.model.request.CreateUserRequestModel;
+import com.anchal.photoappapiusers.model.response.CreateUserResponse;
 import com.anchal.photoappapiusers.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -25,11 +26,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity createUser(@Valid @RequestBody CreateUserRequestModel createUser){
+    public ResponseEntity<CreateUserResponse> createUser(@Valid @RequestBody CreateUserRequestModel createUser){
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         UserDto userDto = modelMapper.map(createUser, UserDto.class);
-        userService.createUser(userDto);
-        return new ResponseEntity(HttpStatus.CREATED);
+        UserDto userRes = userService.createUser(userDto);
+        CreateUserResponse createUserResponse = modelMapper.map(userRes, CreateUserResponse.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createUserResponse);
     }
 }
